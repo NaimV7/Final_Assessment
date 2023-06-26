@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Shopping Cart</title>
+    <style>
+      table {
+        border-collapse: collapse;
+        width: 100%;
+      }
+
+      th,
+      td {
+        text-align: left;
+        padding: 8px;
+      }
+
+      tr:nth-child(even) {
+        background-color: #f2f2f2;
+      }
+
+      .add-btn {
+        background-color: #4caf50;
+        color: white;
+        padding: 8px 16px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        border-radius: 4px;
+      }
+
+      .delete-btn {
+        background-color: #f44336;
+        color: white;
+        padding: 8px 16px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        border-radius: 4px;
+      }
+
+      .update-btn {
+        background-color: #008cba;
+        color: white;
+        padding: 8px 16px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        border-radius: 4px;
+      }
+
+      #image-preview {
+        max-width: 150px;
+        max-height: 150px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Shopping Cart</h1>
+    <table id="cart">
+      <tr>
+        <th>Product</th>
+        <th>Description</th>
+        <th>Price</th>
+        <th>Quantity</th>
+        <th>Image</th>
+        <th>Action</th>
+      </tr>
+      <!-- Cart items will be dynamically added here -->
+      <?php include 'Product.php'; ?>
+    </table>
+
+    <h2>Add Item</h2>
+    <form id="add-form" method="post" action="Product.php">
+      <label for="product">Product:</label>
+      <select id="product" name="product" required>
+        <option value="">Select a product</option>
+        <option value="item1">Cake 1</option>
+        <option value="item2">Cake 2</option>
+        <option value="item3">Cake 3</option>
+        <option value="item4">Cake 4</option>
+      </select>
+
+      <label for="description">Description:</label>
+      <textarea
+        id="description"
+        name="description"
+        rows="3"
+        readonly
+      ></textarea>
+
+      <label for="price">Price:</label>
+      <input
+        type="number"
+        id="price"
+        name="price"
+        step="0.01"
+        required
+        readonly
+      />
+
+      <label for="quantity">Quantity:</label>
+      <input type="number" id="quantity" name="quantity" required />
+
+      <div id="item-preview">
+        <img src="" alt="Product Image" id="image-preview" />
+        <p id="description-preview"></p>
+      </div>
+
+      <button class="add-btn" type="submit">Add to Cart</button>
+    </form>
+
+    <script>
+      // Define product prices, descriptions, and images
+      var products = {
+        item1: {
+          price: 80.0,
+          description: "Description Cake 1",
+          image: "Sarawak layer cake 1.jpg",
+        },
+        item2: {
+          price: 60.0,
+          description: "Description Cake 2",
+          image: "Sarawak layer cake 2.jpg",
+        },
+        item3: {
+          price: 70.0,
+          description: " Description Cake 3",
+          image: "Sarawak layer cake 3.jpg",
+        },
+        item4: {
+          price: 120.0,
+          description: "Description Cake 4",
+          image: "Sarawak layer cake 4.jpg",
+        },
+      };
+
+      // Update price, description, and image based on selected product
+      document
+        .getElementById("product")
+        .addEventListener("change", function () {
+          var selectedProduct = this.value;
+          var priceInput = document.getElementById("price");
+          var descriptionInput = document.getElementById("description");
+          var imagePreview = document.getElementById("image-preview");
+          var descriptionPreview = document.getElementById(
+            "description-preview"
+          );
+
+          if (products[selectedProduct]) {
+            priceInput.value = products[selectedProduct].price.toFixed(2);
+            descriptionInput.value = products[selectedProduct].description;
+            imagePreview.src = products[selectedProduct].image;
+            descriptionPreview.textContent =
+              products[selectedProduct].description;
+            document.getElementById("item-preview").style.display = "block";
+          } else {
+            priceInput.value = "";
+            descriptionInput.value = "";
+            imagePreview.src = "";
+            descriptionPreview.textContent = "";
+            document.getElementById("item-preview").style.display = "none";
+          }
+        });
+
+      // Reset the form and clear the description after submission
+      document
+        .getElementById("add-form")
+        .addEventListener("submit", function () {
+          document.getElementById("add-form").reset();
+          document.getElementById("description").value = "";
+          document.getElementById("image-preview").src = "";
+          document.getElementById("item-preview").style.display = "none";
+        });
+    </script>
+  </body>
+</html>
